@@ -6,6 +6,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import axios from 'axios';
+import moment from 'moment';
 
 import { FormThemeProvider } from 'react-form-component'
 import Form, {
@@ -24,9 +25,9 @@ const Map = () => {
 
   // const bounds = [[80.22396309046624,12.983823755333845],[80.24547874574083,13.00346355132955]];
   const mapContainer = useRef();
-  const [lng, setLng] = useState(80.2335);
-  const [lat, setLat] = useState(12.9913);
-  const [zoom, setZoom] = useState(15);
+  const [lng, setLng] = useState(-0.1878277598563);
+  const [lat, setLat] = useState(51.51198245486377);
+  const [zoom, setZoom] = useState(12);
   const [larr, setLarr] = useState([
   {
     name: "place0",
@@ -80,16 +81,18 @@ const Map = () => {
         console.log(res.data)
         setAns(res.data.ans)
         setVec(res.data.vec)
+
+        window.open("http://localhost:5000/calendar");
       });
     }
 
     return(
       <div>
-      <h5>Total time taken-</h5>
-      <br/>
+      <h5>Total Time Taken-</h5>
       <h2>{ans}</h2>
+      <h6>seconds </h6>
       {vec.map((element,index)=>{
-         return <li key={index}>{element.name}-day {element.day}, time {element.time}</li>
+         return <li key={index}>{element.name}<br/>Start at- {moment(element.start).format("dddd, MMMM Do YYYY, h:mm:ss a")}<br/>End at- {moment(element.end).format("dddd, MMMM Do YYYY, h:mm:ss a")}</li>
       })}
       </div>
       )
@@ -141,7 +144,7 @@ const Map = () => {
       onClick={() => {
         setShow_tsp(true);
       }}
-    >Show TSP</FormButton>
+    >Show Schedule</FormButton>
   </Form>
 
   const Based = () => {
@@ -158,7 +161,7 @@ const Map = () => {
       // maxBounds: bounds,
         attributionControl: false,
         pitch: 60,
-    bearing: -40
+    bearing: 40
     });
 
     map.on('move', () => {
@@ -191,7 +194,9 @@ const Map = () => {
         <h4>Gc🦣Chat</h4><p/>
         <Based />
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}<p/>
-        Click on a location to Chat!
+        Save- Add Marker on Map
+        <br/>
+        Show TSP- Show Schedule
       </div>
       <div className="map-container" ref={mapContainer} />
       <div className="footer">

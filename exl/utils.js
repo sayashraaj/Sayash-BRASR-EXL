@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 function tsp_main(dist, arr) {
   //dist and arr are predefined
   // console.log(dist);
@@ -228,7 +230,7 @@ function tsp_main1(dist, arr) {
   return {ans, vec: ans_obj.vec};
 }
 
-function reformat_vec(vec, dist, rev_dict){
+function reformat_vec(vec, dist, rev_dict, z_dict){
   const temparr = []
   vec.forEach((element)=>{
     temparr.push(element.pos);
@@ -244,9 +246,23 @@ function reformat_vec(vec, dist, rev_dict){
     else vec[i].time = vec[i-1].time + dist[vec[i-1].pos][vec[i].pos];
   }
 
+  // var curr_datetime = new Date();
+  // for(let i=1;i<temparr.length; i++){
+  //   var curr_datetime_copy = curr_datetime;
+  //   vec[i].time = new Date(curr_datetime.getTime() + (vec[i].time)*1000);
+  // }
+
   //adding names of node[pos]
+  const curr_datetime = moment()
+  console.log(curr_datetime);
   for(let i=0;i<temparr.length;i++){
-    vec[i].name = rev_dict[vec[i].pos]
+    vec[i].name = rev_dict[vec[i].pos];
+    vec[i].z = z_dict[vec[i].pos];
+
+    const z = vec[i].z;
+    vec[i].start = moment(curr_datetime).add(vec[i].day, 'days');
+    vec[i].start = moment(vec[i].start).add(vec[i].time, 'seconds');
+    vec[i].end = moment(vec[i].start).add(z, 'seconds');
   }
 
   return vec;

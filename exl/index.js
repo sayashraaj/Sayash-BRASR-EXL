@@ -2,10 +2,13 @@ const express = require('express');
 const axios = require('axios')
 const cors = require('cors')
 const app = express();
+const ical = require('ical-generator');
+const moment = require('moment');
 
 const PORT = 5000;
+let vec_copy = []
 app.use(cors());
-const {tsp_main, tsp_main1, reformat_vec} = require('./utils')
+const {tsp_main, tsp_main1, reformat_vec, generate_ics} = require('./utils')
 const dummy_response = {data: {
     "results": [
         {
@@ -121,12 +124,12 @@ app.post('/', async(req,res)=>{
   //function generates dist(nxn)- no floyd warshall needed
 
   let departure_searches = []
-  let dict = {}, rev_dict = {}
+  let dict = {}, rev_dict = {}, z_dict = {}
   for(let i=0;i<req.body.length; i++){
 
     dict[req.body[i].id] = i;
-    console.log(req.body[i].id)
     rev_dict[i] = req.body[i].id;
+    z_dict[i] = req.body[i].z;
 
     let arrival_location_ids = []
     for(let i=0;i<req.body.length;i++) arrival_location_ids.push(req.body[i].id);
@@ -185,9 +188,29 @@ app.post('/', async(req,res)=>{
 
   let {ans, vec} = tsp_main1(dist, arr);
 
-  vec = reformat_vec(vec, dist, rev_dict);
+  vec = reformat_vec(vec, dist, rev_dict, z_dict);
+  vec_copy = vec;
+  // generate_ics(vec, z_dict);
 
   res.json({ans, vec});
+})
+
+app.get('/calendar', (req,res)=>{
+
+  let events_arr = []
+  for(let i=0;i<vec_copy.length;i++){
+    events_arr.push({
+      start: vec_copy[i].start,
+      end: vec_copy[i].end,
+      location: vec_copy[i].name
+    })
+  }
+
+  const cal = ical({
+    events: events_arr
+  });
+
+  cal.serve(res);
 })
 
 app.listen(PORT, ()=>{
