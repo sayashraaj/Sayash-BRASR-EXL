@@ -152,8 +152,6 @@ app.post('/', async(req,res)=>{
     "departure_searches": departure_searches
   }
 
-  // res.json(reqobject)
-
   let matrix_array = await axios({
     method: 'post',
     url: 'https://api.traveltimeapp.com/v4/time-filter',
@@ -185,8 +183,6 @@ app.post('/', async(req,res)=>{
     arr.push(temparr);
   }
 
-
-  //////////////////////////////////////////////////////////////////////////////////////////
   let {ans, vec} = tsp_main1(dist, arr);
 
   vec = reformat_vec(vec, dist, rev_dict);
