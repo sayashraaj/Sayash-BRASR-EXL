@@ -228,7 +228,32 @@ function tsp_main1(dist, arr) {
   return {ans, vec: ans_obj.vec};
 }
 
+function reformat_vec(vec, dist, rev_dict){
+  const temparr = []
+  vec.forEach((element)=>{
+    temparr.push(element.pos);
+  })
+
+  //home node
+  vec[0].time = 0;
+
+  for(let i=1; i<temparr.length;i++){
+    if(vec[i].day != vec[i-1].day){
+      vec[i].time = 0;
+    }
+    else vec[i].time = vec[i-1].time + dist[vec[i-1].pos][vec[i].pos];
+  }
+
+  //adding names of node[pos]
+  for(let i=0;i<temparr.length;i++){
+    vec[i].name = rev_dict[vec[i].pos]
+  }
+
+  return vec;
+}
+
 module.exports = {
   tsp_main, 
-  tsp_main1
+  tsp_main1,
+  reformat_vec
 }

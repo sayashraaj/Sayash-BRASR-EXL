@@ -1,9 +1,11 @@
 const express = require('express');
 const axios = require('axios')
+const cors = require('cors')
 const app = express();
 
-const PORT = 3000;
-const {tsp_main, tsp_main1} = require('./utils')
+const PORT = 5000;
+app.use(cors());
+const {tsp_main, tsp_main1, reformat_vec} = require('./utils')
 const dummy_response = {data: {
     "results": [
         {
@@ -113,14 +115,18 @@ app.use(express.urlencoded({ extended: false }));
 
 app.post('/', async(req,res)=>{
 
+    console.log(req.body);
+
   // req.body contains- array of {name of place (id), coords[2]}
   //function generates dist(nxn)- no floyd warshall needed
 
   let departure_searches = []
-  let dict = {}
+  let dict = {}, rev_dict = {}
   for(let i=0;i<req.body.length; i++){
 
     dict[req.body[i].id] = i;
+    console.log(req.body[i].id)
+    rev_dict[i] = req.body[i].id;
 
     let arrival_location_ids = []
     for(let i=0;i<req.body.length;i++) arrival_location_ids.push(req.body[i].id);
@@ -148,16 +154,16 @@ app.post('/', async(req,res)=>{
 
   // res.json(reqobject)
 
-  // let matrix_array = await axios({
-  //   method: 'post',
-  //   url: 'https://api.traveltimeapp.com/v4/time-filter',
-  //   headers: {
-  //     'X-Application-Id': '5543f7a8',
-  //     'X-Api-Key': '1bcfbbc477ebcf6ed375498554b2ed75'
-  //   },
-  //   data: reqobject
-  // });
-  let matrix_array = dummy_response;
+  let matrix_array = await axios({
+    method: 'post',
+    url: 'https://api.traveltimeapp.com/v4/time-filter',
+    headers: {
+      'X-Application-Id': '5543f7a8',
+      'X-Api-Key': '1bcfbbc477ebcf6ed375498554b2ed75'
+    },
+    data: reqobject
+  });
+  // let matrix_array = dummy_response;
 
   const n = matrix_array.data.results.length
 
@@ -167,7 +173,7 @@ app.post('/', async(req,res)=>{
     let u=dict[matrix_array.data.results[i].search_id];
     for(let j=0;j<matrix_array.data.results[i].locations.length;j++){
       let v=dict[matrix_array.data.results[i].locations[j].id];
-      if(dist[u][v]) continue;
+      if(dist[u] && dist[u][v]) continue;
       dist[u][v]=matrix_array.data.results[i].locations[j].properties[0].travel_time;
       dist[v][u]=matrix_array.data.results[i].locations[j].properties[0].travel_time;
     }
@@ -181,7 +187,10 @@ app.post('/', async(req,res)=>{
 
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  const {ans, vec} = tsp_main1(dist, arr);
+  let {ans, vec} = tsp_main1(dist, arr);
+
+  vec = reformat_vec(vec, dist, rev_dict);
+
   res.json({ans, vec});
 })
 
