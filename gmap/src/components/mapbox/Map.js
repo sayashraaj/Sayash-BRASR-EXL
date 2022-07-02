@@ -138,6 +138,11 @@ const Map = () => {
     />
     <FormButton
       onClick={(fields) => {
+        fields.end = parseFloat(fields.end)
+        fields.lat = parseFloat(fields.lat)
+        fields.lng = parseFloat(fields.lng)
+        fields.start = parseFloat(fields.start)
+        fields.z = parseFloat(fields.z)
         setLarr([...larr, fields]);
       }}
     >Save</FormButton>
