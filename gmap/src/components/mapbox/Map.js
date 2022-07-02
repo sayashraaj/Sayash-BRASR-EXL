@@ -1,5 +1,4 @@
 import './Map.css'
-import geojson from './geojson.js'
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
@@ -18,12 +17,9 @@ import Form, {
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2NjaGF0MTIzIiwiYSI6ImNraGwydGZpYzAzOWUzMm14bXlndmlhbXoifQ.8o9h0nZe8uJ9YDltuRcF2A';
 
-console.log(geojson)
-
 
 const Map = () => {
 
-  // const bounds = [[80.22396309046624,12.983823755333845],[80.24547874574083,13.00346355132955]];
   const mapContainer = useRef();
   const [lng, setLng] = useState(-0.1878277598563);
   const [lat, setLat] = useState(51.51198245486377);
@@ -182,13 +178,6 @@ const Map = () => {
       setZoom(map.getZoom().toFixed(2));
     });
 
- //    geojson.features.forEach(function(element) {
-  // var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
-  //  .setLngLat(element.geometry.coordinates)
-  //  .setHTML(`<a href="/chat?room=${element.properties.title}" style="color: black"><div>${element.properties.title}</div></a>`)
-  //  .addTo(map);
-  // });
-
   larr.forEach(function(element) {
     console.log(element)
   var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
@@ -213,7 +202,7 @@ const Map = () => {
       </div>
       <div className="map-container" ref={mapContainer} />
       <div className="footer">
-      <span className="hh">Made with <span style={{color: "#e25555"}}>&#9829;</span> by <a href="https://www.instagram.com/gajarkapizza/">Sayash</a></span>
+      <span className="hh">Made with <span style={{color: "#e25555"}}>&#9829;</span> by <a href="https://www.linkedin.com/in/sayashraaj/">Sayash</a></span>
       </div>
     </div>
   );
