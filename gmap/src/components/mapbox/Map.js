@@ -30,7 +30,7 @@ const Map = () => {
   const [zoom, setZoom] = useState(12);
   const [larr, setLarr] = useState([
   {
-    name: "place0",
+    name: "Home",
     lat: 51.51198245486377,
     lng: -0.1278277598563,
     start: 0,
@@ -38,7 +38,7 @@ const Map = () => {
     z: 0
   },
   {
-    name: "place1",
+    name: "Office",
     lat: 51.503120589264064,
     lng: -0.15282095066100,
     start: 0,
@@ -46,7 +46,7 @@ const Map = () => {
     z: 0
   },
   {
-    name: "place2",
+    name: "Shop",
     lat: 51.503341807681544,
     lng: -0.11952824596429,
     start: 0,
@@ -100,36 +100,37 @@ const Map = () => {
 
   const BasicExampleForm = () =>
   <Form fields={['name', 'lat', 'lng', 'start', 'end', 'z']}>
-    <Input
+    <Input style={{color: 'white'}}
       name='name'
       label='name'
       value="john"
+      initialValue="place3"
     />
-    <Input
+    <Input style={{color: 'white'}}
       name='lat'
       label='lat'
       type='number'
       value='12.989427'
     />
-    <Input
+    <Input style={{color: 'white'}}
       name='lng'
       label='lng'
       type='number'
       value='80.235381'
     />
-    <Input
+    <Input style={{color: 'white'}}
       name='start'
       label='start'
       type='number'
       value='0'
     />
-    <Input
+    <Input style={{color: 'white'}}
       name='end'
       label='end'
       type='number'
       value='1'
     />
-    <Input
+    <Input style={{color: 'white'}}
       name='z'
       label='z'
       type='number'
@@ -149,7 +150,13 @@ const Map = () => {
 
   const Based = () => {
     if(show_tsp === true) return <Tsp />
-    return <FormThemeProvider><BasicExampleForm /></FormThemeProvider>
+    return (
+      <>
+      <FormThemeProvider>
+      <BasicExampleForm />
+      </FormThemeProvider>
+      </>
+      )
   }
 
   useEffect(() => {
