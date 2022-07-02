@@ -265,7 +265,17 @@ function reformat_vec(vec, dist, rev_dict, z_dict){
     vec[i].end = moment(vec[i].start).add(z, 'seconds');
   }
 
-  return vec;
+  res_vec = []
+  for(let i=0;i<vec.length; i++){
+    res_vec.push({
+      day: vec[i].day,
+      name: vec[i].name,
+      start: vec[i].start,
+      end: vec[i].end
+    })
+  }
+
+  return res_vec;
 }
 
 module.exports = {

@@ -191,7 +191,8 @@ const Map = () => {
   return (
     <div>
       <div className="sidebar">
-        <h4>Gc🦣Chat</h4><p/>
+        <h4>🛵B.R.A.S.R.✅</h4>
+        Bitmasking Recursive Appointment Scheduling and Routing
         <Based />
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}<p/>
         Save- Add Marker on Map
